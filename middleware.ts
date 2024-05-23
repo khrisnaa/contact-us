@@ -10,25 +10,25 @@ export default middleware((req) => {
   const isLoggedIn = !!req.auth;
   console.log('🚀 ~ middleware ~ isLoggedIn :', isLoggedIn);
 
-  //   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  //   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  //   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
-  //   if (isApiAuthRoute) return;
+  if (isApiAuthRoute) return;
 
-  //   if (isAuthRoute) {
-  //     if (isLoggedIn) {
-  //       return Response.redirect(new URL('/contact-us', nextUrl));
-  //     }
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return Response.redirect(new URL('/', nextUrl));
+    }
 
-  //     return;
-  //   }
+    return;
+  }
 
-  //   if (!isLoggedIn && !isPublicRoute) {
-  //     return Response.redirect(new URL('/auth/login', nextUrl));
-  //   }
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL('/auth/login', nextUrl));
+  }
 
-  //   return;
+  return;
 });
 
 export const config = {

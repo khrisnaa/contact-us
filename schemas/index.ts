@@ -32,3 +32,9 @@ export const NewPasswordSchema = z.object({
     message: 'Minimum 6 character required!',
   }),
 });
+
+export const ContactUsSchema = z.object({
+  message: z.string().min(1, {
+    message: 'At least fill 1 character!',
+  }),
+});
