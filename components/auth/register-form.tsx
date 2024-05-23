@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { CardWrapper } from "@/components/auth/card-wrapper";
+import { CardWrapper } from '@/components/auth/card-wrapper';
 import {
   Form,
   FormControl,
@@ -8,32 +8,57 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { RegisterSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { RegisterSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { register } from '@/actions/register';
+import { FormSuccess } from '@/components/auth/form-success';
+import { FormError } from '@/components/auth/form-error';
+import { useState, useTransition } from 'react';
 
 export const RegisterForm = () => {
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: '',
+      email: '',
+      password: '',
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
+    setError('');
+    setSuccess('');
+
+    startTransition(() => {
+      register(values)
+        .then((data) => {
+          data.error && setError(data?.error);
+          data.success && setSuccess(data?.success);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    });
+  };
 
   return (
     <CardWrapper
       headerLabel="Create an account"
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
+      showSocial
     >
       <Form {...form}>
-        <form className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -42,7 +67,12 @@ export const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Joko Dodok" type="text" />
+                    <Input
+                      {...field}
+                      placeholder="Joko Dodok"
+                      type="text"
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -59,6 +89,7 @@ export const RegisterForm = () => {
                       {...field}
                       placeholder="joko@gmail.com"
                       type="email"
+                      disabled={isPending}
                     />
                   </FormControl>
                   <FormMessage />
@@ -72,14 +103,23 @@ export const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="******" type="password" />
+                    <Input
+                      {...field}
+                      placeholder="******"
+                      type="password"
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <Button className="w-full">Create an account</Button>
+          <FormSuccess message={success} />
+          <FormError message={error} />
+          <Button type="submit" className="w-full" disabled={isPending}>
+            Create an account
+          </Button>
         </form>
       </Form>
     </CardWrapper>
