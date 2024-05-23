@@ -1,6 +1,7 @@
 import { sendMail } from '@/actions/send-mail';
 import { User } from '@prisma/client';
 const domain = process.env.PUBLIC_APP_URL;
+const defaultSender = process.env.PUBLIC_EMAIL_USERNAME || '';
 export const sendVerificationEmail = async (email: string, token: string) => {
   const link = `${domain}/auth/new-verification?token=${token}`;
   const subject = 'Confirm Your Email';
@@ -37,44 +38,28 @@ export const sendContactUsEmail = async (
   const subject = `Send by ${email}`;
   const html = `<div
   style="
-    flex-direction: column;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     max-width: 600px;
     margin: 50px auto;
-    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
+    background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   "
 >
   <div
     style="
-      font-size: 24px;
-      font-weight: bold;
-      color: #333333;
-      margin-bottom: 20px;
-    "
-  >
-   ${name}'s email
-  </div>
-  <div
-    style="
       font-size: 16px;
-      color: #666666;
       text-align: justify;
       margin-bottom: 20px;
     "
   >
-    <p>Hi SSexponent,</p>
+    <p>Hi I'm ${name},</p>
     <p>
      ${message}
     </p>
   </div>
-</div>`;
+</div>
+`;
 
-  await sendMail('pmsukk@gmail.com', subject, html);
+  await sendMail(defaultSender, subject, html);
 };
