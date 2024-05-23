@@ -9,8 +9,8 @@ export const sendTestMail = async () => {
     port: 465,
     secure: true,
     auth: {
-      user: process.env.PUBLIC_EMAIL_USERNAME,
-      pass: process.env.PUBLIC_EMAIL_PASSWORD,
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 
@@ -25,7 +25,7 @@ export const sendTestMail = async () => {
 `;
 
   const mailOptions = {
-    from: process.env.PUBLIC_EMAIL_USERNAME,
+    from: process.env.EMAIL_USERNAME,
     to: 'pmsukk7@gmail.com',
     subject: subject,
     html: html,
