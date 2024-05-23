@@ -8,7 +8,6 @@ const { auth: middleware } = NextAuth(authConfig);
 export default middleware((req) => {
   const nextUrl = req.nextUrl;
   const isLoggedIn = !!req.auth;
-  console.log('🚀 ~ middleware ~ isLoggedIn :', isLoggedIn);
 
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);

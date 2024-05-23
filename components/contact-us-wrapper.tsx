@@ -4,6 +4,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/card';
+import { currentUser } from '@/lib/auth';
 
 export const ContactUsWrapper = ({
   children,
@@ -11,7 +12,7 @@ export const ContactUsWrapper = ({
   children: React.ReactNode;
 }) => {
   return (
-    <Card className=" max-w-xs md:max-w-xl lg:max-w-3xl">
+    <Card className="w-full max-w-xs md:max-w-xl lg:max-w-3xl">
       <CardHeader>
         <div className="flex flex-col items-center justify-center gap-y-4">
           <h1 className="text-3xl font-semibold">Contact Us</h1>

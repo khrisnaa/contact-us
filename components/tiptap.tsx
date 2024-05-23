@@ -27,19 +27,21 @@ const Tiptap = ({
     content: message,
     editorProps: {
       attributes: {
-        class: 'rounded-md border min-h-[150px] border-input bg-background',
+        class: 'rounded-md border min-h-[150px] border-input bg-background p-4',
       },
     },
     onUpdate({ editor }) {
       onChange(editor.getHTML());
-      console.log(editor.getHTML());
     },
   });
 
   return (
     <div className="flex min-h-[250px] flex-col justify-stretch gap-y-4">
       <Toolbar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent
+        editor={editor}
+        className="max-h-[200px] overflow-y-hidden"
+      />
     </div>
   );
 };

@@ -2,12 +2,7 @@
 
 import { createTransport } from 'nodemailer';
 
-export const sendMail = async (
-  to: string,
-  subject: string,
-  html: string,
-  from?: string,
-) => {
+export const sendMail = async (to: string, subject: string, html: string) => {
   const transporter = createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',

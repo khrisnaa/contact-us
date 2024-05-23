@@ -1,5 +1,4 @@
 import { sendMail } from '@/actions/send-mail';
-import { User } from '@prisma/client';
 const domain = process.env.PUBLIC_APP_URL;
 const defaultSender = process.env.EMAIL_USERNAME || '';
 export const sendVerificationEmail = async (email: string, token: string) => {

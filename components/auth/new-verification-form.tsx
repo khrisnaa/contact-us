@@ -4,7 +4,7 @@ import { newVerification } from '@/actions/new-verification';
 import { CardWrapper } from '@/components/auth/card-wrapper';
 import { FormError } from '@/components/auth/form-error';
 import { FormSuccess } from '@/components/auth/form-success';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
 
@@ -15,6 +15,8 @@ export const NewVerificationForm = () => {
   const searchParam = useSearchParams();
   const token = searchParam.get('token');
 
+  const router = useRouter();
+
   const onSubmit = useCallback(async () => {
     if (!token) {
       return setError('Token is missing!');
@@ -23,19 +25,26 @@ export const NewVerificationForm = () => {
     setTimeout(async () => {
       await newVerification(token)
         .then((data) => {
-          setSuccess(data?.success);
+          if (data.success) {
+            setSuccess(data?.success);
+          }
 
-          setError(data?.error);
+          setTimeout(() => {
+            router.push('/auth/login');
+            if (data.error) {
+              setError(data?.error);
+            }
+          }, 3000);
         })
         .catch(() => {
           setError('Something went wrong!');
         });
-    }, 10000);
-  }, [token, success, error]);
+    }, 1000);
+  }, [token]);
 
   useEffect(() => {
     onSubmit();
-  }, [onSubmit]);
+  }, []);
 
   return (
     <CardWrapper
@@ -45,8 +54,8 @@ export const NewVerificationForm = () => {
     >
       <div className="flex w-full items-center justify-center">
         {!success && !error && <PacmanLoader />}
-        <FormSuccess message={success} />
-        <FormError message={error} />
+        {!error && success && <FormSuccess message={success} />}
+        {!success && error && <FormError message={error} />}
       </div>
     </CardWrapper>
   );
