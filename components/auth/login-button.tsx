@@ -26,7 +26,7 @@ export const LoginButton = ({ children, mode, asChild }: LoginButtonProps) => {
         >
           {children}
         </DialogTrigger>
-        <DialogContent className="w-auto border-none bg-transparent p-0">
+        <DialogContent className="flex w-full items-center justify-center border-none bg-transparent p-0">
           <LoginForm />
         </DialogContent>
       </Dialog>

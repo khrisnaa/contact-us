@@ -1,10 +1,12 @@
 'use client';
 
 import { sendContactUsMail } from '@/actions/send-contact-us-mail';
+import { sendTestMail } from '@/actions/send-test-mail';
 import { FormError } from '@/components/auth/form-error';
 import { FormSuccess } from '@/components/auth/form-success';
 import { LoginButton } from '@/components/auth/login-button';
 import { ContactUsWrapper } from '@/components/contact-us-wrapper';
+import Tiptap from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -32,13 +34,14 @@ export const ContactUsForm = () => {
 
   const form = useForm<z.infer<typeof ContactUsSchema>>({
     resolver: zodResolver(ContactUsSchema),
+
     defaultValues: {
       message: '',
     },
   });
-  const onSubmit = (values: z.infer<typeof ContactUsSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ContactUsSchema>) => {
     startTransition(() => {
-      sendContactUsMail(values, user?.email || '')
+      sendContactUsMail(values, user?.email || '', user?.name || '')
         .then((data) => {
           setSuccess(data.success);
           setError(data.errror);
@@ -56,14 +59,9 @@ export const ContactUsForm = () => {
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{JSON.stringify(user)}</FormLabel>
+                  {/* <FormLabel>{JSON.stringify(user)}</FormLabel> */}
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Type your message here..."
-                      className="resize-none"
-                      disabled={!user || isPending}
-                    />
+                    <Tiptap message={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
